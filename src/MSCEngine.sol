@@ -24,7 +24,7 @@
 
 pragma solidity 0.8.19;
 
-
+import {OracleLib, AggregatorV3Interface} from "./libraries/OracleLib.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {MyStableCoin} from "./MyStableCoin.sol";
@@ -157,7 +157,7 @@ contract MSCEngine is ReentrancyGuard {
     {
         _burnMsc(amountMscToBurn, msg.sender, msg.sender);
         _redeemCollateral(tokenCollateralAddress, amountCollateral, msg.sender, msg.sender);
-        revertIfHealthFactorIsBroken(msg.sender);
+        _revertIfHealthFactorIsBroken(msg.sender);
     }
 
     /*
@@ -172,7 +172,7 @@ contract MSCEngine is ReentrancyGuard {
         nonReentrant
     {
         _redeemCollateral(tokenCollateralAddress, amountCollateral, msg.sender, msg.sender);
-        revertIfHealthFactorIsBroken(msg.sender);
+        _revertIfHealthFactorIsBroken(msg.sender);
     }
 
     /*
@@ -182,7 +182,7 @@ contract MSCEngine is ReentrancyGuard {
      */
     function burnMsc(uint256 amount) external moreThanZero(amount) {
         _burnMsc(amount, msg.sender, msg.sender);
-        revertIfHealthFactorIsBroken(msg.sender); // I don't think this would ever hit...
+        _revertIfHealthFactorIsBroken(msg.sender); // I don't think this would ever hit...
     }
 
     /*
@@ -224,7 +224,7 @@ contract MSCEngine is ReentrancyGuard {
         if (endingUserHealthFactor <= startingUserHealthFactor) {
             revert MSCEngine__HealthFactorNotImproved();
         }
-        revertIfHealthFactorIsBroken(msg.sender);
+        _revertIfHealthFactorIsBroken(msg.sender);
     }
 
     ///////////////////
