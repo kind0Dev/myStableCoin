@@ -22,10 +22,10 @@
 
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.19;
+pragma solidity ^0.8.20;
 
 import {OracleLib, AggregatorV3Interface} from "./libraries/OracleLib.sol";
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {MyStableCoin} from "./MyStableCoin.sol";
 
@@ -121,7 +121,7 @@ contract MSCEngine is ReentrancyGuard {
         // These feeds will be the USD pairs
         // For example ETH / USD or MKR / USD
         for (uint256 i = 0; i < tokenAddresses.length; i++) {
-            s_priceFeeds[tokenAddresses[i]] = price_FeedAddresses[i];
+            s_priceFeeds[tokenAddresses[i]] = priceFeedAddresses[i];
             s_collateralTokens.push(tokenAddresses[i]);
         }
         i_msc = MyStableCoin(mscAddress);
