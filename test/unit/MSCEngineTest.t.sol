@@ -502,77 +502,77 @@ contract MSCEngineTest is StdCheats, Test {
 //     ///////////////////////////////////
 //     // View & Pure Function Tests //
 //     //////////////////////////////////
-//     function testGetCollateralTokenPriceFeed() public {
-//         address priceFeed = msce.getCollateralTokenPriceFeed(weth);
-//         assertEq(priceFeed, ethUsdPriceFeed);
-//     }
+    function testGetCollateralTokenPriceFeed() public {
+        address priceFeed = msce.getCollateralTokenPriceFeed(weth);
+        assertEq(priceFeed, ethUsdPriceFeed);
+    }
 
-//     function testGetCollateralTokens() public {
-//         address[] memory collateralTokens = msce.getCollateralTokens();
-//         assertEq(collateralTokens[0], weth);
-//     }
+    function testGetCollateralTokens() public {
+        address[] memory collateralTokens = msce.getCollateralTokens();
+        assertEq(collateralTokens[0], weth);
+    }
 
-//     function testGetMinHealthFactor() public {
-//         uint256 minHealthFactor = msce.getMinHealthFactor();
-//         assertEq(minHealthFactor, MIN_HEALTH_FACTOR);
-//     }
+    function testGetMinHealthFactor() public {
+        uint256 minHealthFactor = msce.getMinHealthFactor();
+        assertEq(minHealthFactor, MIN_HEALTH_FACTOR);
+    }
 
-//     function testGetLiquidationThreshold() public {
-//         uint256 liquidationThreshold = msce.getLiquidationThreshold();
-//         assertEq(liquidationThreshold, LIQUIDATION_THRESHOLD);
-//     }
+    function testGetLiquidationThreshold() public {
+        uint256 liquidationThreshold = msce.getLiquidationThreshold();
+        assertEq(liquidationThreshold, LIQUIDATION_THRESHOLD);
+    }
 
-//     function testGetAccountCollateralValueFromInformation() public depositedCollateral {
-//         (, uint256 collateralValue) = msce.getAccountInformation(user);
-//         uint256 expectedCollateralValue = msce.getUsdValue(weth, amountCollateral);
-//         assertEq(collateralValue, expectedCollateralValue);
-//     }
+    function testGetAccountCollateralValueFromInformation() public depositedCollateral {
+        (, uint256 collateralValue) = msce.getAccountInformation(user);
+        uint256 expectedCollateralValue = msce.getUsdValue(weth, amountCollateral);
+        assertEq(collateralValue, expectedCollateralValue);
+    }
 
-//     function testGetCollateralBalanceOfUser() public {
-//         vm.startPrank(user);
-//         ERC20Mock(weth).approve(address(msce), amountCollateral);
-//         msce.depositCollateral(weth, amountCollateral);
-//         vm.stopPrank();
-//         uint256 collateralBalance = msce.getCollateralBalanceOfUser(user, weth);
-//         assertEq(collateralBalance, amountCollateral);
-//     }
+    function testGetCollateralBalanceOfUser() public {
+        vm.startPrank(user);
+        ERC20Mock(weth).approve(address(msce), amountCollateral);
+        msce.depositCollateral(weth, amountCollateral);
+        vm.stopPrank();
+        uint256 collateralBalance = msce.getCollateralBalanceOfUser(user, weth);
+        assertEq(collateralBalance, amountCollateral);
+    }
 
-//     function testGetAccountCollateralValue() public {
-//         vm.startPrank(user);
-//         ERC20Mock(weth).approve(address(msce), amountCollateral);
-//         msce.depositCollateral(weth, amountCollateral);
-//         vm.stopPrank();
-//         uint256 collateralValue = msce.getAccountCollateralValue(user);
-//         uint256 expectedCollateralValue = msce.getUsdValue(weth, amountCollateral);
-//         assertEq(collateralValue, expectedCollateralValue);
-//     }
+    function testGetAccountCollateralValue() public {
+        vm.startPrank(user);
+        ERC20Mock(weth).approve(address(msce), amountCollateral);
+        msce.depositCollateral(weth, amountCollateral);
+        vm.stopPrank();
+        uint256 collateralValue = msce.getAccountCollateralValue(user);
+        uint256 expectedCollateralValue = msce.getUsdValue(weth, amountCollateral);
+        assertEq(collateralValue, expectedCollateralValue);
+    }
 
-//     function testGetMsc() public {
-//         address mscAddress = msce.getMsc();
-//         assertEq(mscAddress, address(msc));
-//     }
+    function testGetMscAddress() public {
+        address mscAddress = msce.getMsc();
+        assertEq(mscAddress, address(msc));
+    }
 
-//     function testLiquidationPrecision() public {
-//         uint256 expectedLiquidationPrecision = 100;
-//         uint256 actualLiquidationPrecision = msce.getLiquidationPrecision();
-//         assertEq(actualLiquidationPrecision, expectedLiquidationPrecision);
-//     }
+    function testLiquidationPrecision() public {
+        uint256 expectedLiquidationPrecision = 100;
+        uint256 actualLiquidationPrecision = msce.getLiquidationPrecision();
+        assertEq(actualLiquidationPrecision, expectedLiquidationPrecision);
+    }
 
-//     // How do we adjust our invariant tests for this?
-//     // function testInvariantBreaks() public depositedCollateralAndMintedMsc {
-//     //     MockV3Aggregator(ethUsdPriceFeed).updateAnswer(0);
+    // How do we adjust our invariant tests for this?
+    function testInvariantBreaks() public depositedCollateralAndMintedMsc {
+        MockV3Aggregator(ethUsdPriceFeed).updateAnswer(0);
 
-//     //     uint256 totalSupply = msc.totalSupply();
-//     //     uint256 wethDeposted = ERC20Mock(weth).balanceOf(address(msce));
-//     //     uint256 wbtcDeposited = ERC20Mock(wbtc).balanceOf(address(msce));
+        uint256 totalSupply = msc.totalSupply();
+        uint256 wethDeposted = ERC20Mock(weth).balanceOf(address(msce));
+        uint256 wbtcDeposited = ERC20Mock(wbtc).balanceOf(address(msce));
 
-//     //     uint256 wethValue = msce.getUsdValue(weth, wethDeposted);
-//     //     uint256 wbtcValue = msce.getUsdValue(wbtc, wbtcDeposited);
+        uint256 wethValue = msce.getUsdValue(weth, wethDeposted);
+        uint256 wbtcValue = msce.getUsdValue(wbtc, wbtcDeposited);
 
-//     //     console.log("wethValue: %s", wethValue);
-//     //     console.log("wbtcValue: %s", wbtcValue);
-//     //     console.log("totalSupply: %s", totalSupply);
+        console.log("wethValue: %s", wethValue);
+        console.log("wbtcValue: %s", wbtcValue);
+        console.log("totalSupply: %s", totalSupply);
 
-//     //     assert(wethValue + wbtcValue >= totalSupply);
-//     // }
+        assert(wethValue + wbtcValue <= totalSupply);
+    }
 }
