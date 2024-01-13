@@ -9,3 +9,5 @@
 3. Collateral: Exogenous (Crypto)
     1. ETH
     2. BTC
+
+## INVARIANTS/PROPERTIES
